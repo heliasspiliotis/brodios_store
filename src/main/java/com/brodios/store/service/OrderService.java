@@ -43,7 +43,8 @@ public class OrderService {
             int quantity = cartItem.getQuantity();
 
             // Έλεγχος Stock
-            if (variant.getStockQuantity() < quantity) {
+            if (variant.getStockQuantity() < quantity)
+            {
                 throw new RuntimeException("Δεν υπάρχει επαρκές απόθεμα για το προϊόν: " + variant.getProduct().getName());
             }
 

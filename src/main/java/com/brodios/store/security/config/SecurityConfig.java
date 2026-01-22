@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        // Προσθήκη για να επιτρέπονται οι εικόνες
+                        .requestMatchers("/images/**").permitAll()
                         // Επιτρέπουμε το Swagger
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         //Επιτρέπουμε να εμφανίζεται η σελίδα

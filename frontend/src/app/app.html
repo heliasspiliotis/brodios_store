@@ -1,0 +1,47 @@
+<div class="main-container">
+
+  <nav class="navbar">
+    <div class="logo">BRODIOS</div>
+    <ul class="nav-links">
+      <li (click)="changePage('home')" [class.active]="currentPage === 'home'">HOME</li>
+      <li (click)="changePage('store')" [class.active]="currentPage === 'store'">STORE</li>
+      <li (click)="changePage('about')" [class.active]="currentPage === 'about'">ABOUT US</li>
+    </ul>
+  </nav>
+
+  <div class="page-section home-view" *ngIf="currentPage === 'home'">
+    <div class="welcome-box">
+      <h1>Welcome to Brodios Store</h1>
+      <p>Official Team Merchandise</p>
+      <button class="cta-btn" (click)="changePage('store')">VISIT STORE</button>
+    </div>
+  </div>
+
+  <div class="page-section store-view" *ngIf="currentPage === 'store'">
+
+    <div class="category-bar">
+      <button (click)="filterCategory('all')" [class.selected]="selectedCategory === 'all'">ALL</button>
+      <button (click)="filterCategory('Kits')" [class.selected]="selectedCategory === 'Kits'">KITS</button>
+      <button (click)="filterCategory('Jackets')" [class.selected]="selectedCategory === 'Jackets'">JACKETS</button>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card" *ngFor="let product of filteredProducts">
+        <div class="image-container">
+          <img [src]="product.imageUrl" [alt]="product.name">
+        </div>
+        <div class="info">
+          <h3>{{ product.name }}</h3>
+          <p class="price">{{ product.basePrice }} €</p>
+          <button class="buy-btn">Προσθήκη</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-section about-view" *ngIf="currentPage === 'about'">
+    <h1>About Us</h1>
+    <p>We are Brodios FC. Excellence since 2022.</p>
+  </div>
+
+</div>

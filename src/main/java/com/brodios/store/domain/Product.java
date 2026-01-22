@@ -22,6 +22,8 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
+    private String imageUrl;
+
     // Σχέση Πολλά:1 (Many-to-One): Πολλά προϊόντα ανήκουν σε μία κατηγορία
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
