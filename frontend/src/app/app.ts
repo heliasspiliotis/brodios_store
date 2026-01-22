@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
   // Δεδομένα
   products: any[] = [];
 
-  // ΑΥΤΑ ΕΛΕΙΠΑΝ ΚΑΙ ΕΒΓΑΖΕ ΤΟ ΛΑΘΟΣ:
   selectedProduct: any = null; // Το προϊόν που βλέπουμε
   selectedSize: any = null;    // Το μέγεθος που διάλεξε ο πελάτης
 
@@ -47,11 +46,10 @@ export class AppComponent implements OnInit {
     this.selectedCategory = category;
   }
 
-  // --- ΝΕΕΣ ΣΥΝΑΡΤΗΣΕΙΣ ΓΙΑ ΤΟ DETAILS PAGE ---
 
   // 1. Άνοιγμα προϊόντος
   openProduct(product: any) {
-    console.log('Opening product:', product.name); // Για έλεγχο
+    console.log('Product data:', product);
     this.selectedProduct = product;
     this.selectedSize = null; // Reset το μέγεθος
     this.currentPage = 'details';
@@ -68,10 +66,8 @@ export class AppComponent implements OnInit {
       alert('Παρακαλώ επιλέξτε μέγεθος!');
       return;
     }
-    alert(`Προστέθηκε στο καλάθι: ${this.selectedProduct.name} (Μέγεθος: ${this.selectedSize.sizeName})`);
+    alert(`Προστέθηκε στο καλάθι: ${this.selectedProduct.name} (Μέγεθος: ${this.selectedSize.size})`);
   }
-
-  // --- ΒΟΗΘΗΤΙΚΑ ---
 
   // Φιλτράρισμα λίστας
   get filteredProducts() {

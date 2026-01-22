@@ -55,13 +55,17 @@
 
         <div class="size-selector">
           <h3>Επιλέξτε Μέγεθος:</h3>
-          <div class="sizes">
-            <button *ngFor="let variant of selectedProduct.variants"
-                    (click)="selectSize(variant)"
-                    [class.active-size]="selectedSize === variant"
-                    [disabled]="variant.stockQuantity === 0">
-              {{ variant.sizeName }}
-            </button>
+          <div class="size-selector">
+            <h3>Επιλέξτε Μέγεθος:</h3>
+            <div class="sizes">
+              <button *ngFor="let variant of selectedProduct.variants"
+                      (click)="selectSize(variant)"
+                      [class.active-size]="selectedSize === variant"
+                      [disabled]="variant.stockQuantity === 0">
+                {{ variant.size }}
+              </button>
+            </div>
+            <p *ngIf="selectedSize" class="stock-info">Διαθέσιμα τεμάχια: {{ selectedSize.stockQuantity }}</p>
           </div>
           <p *ngIf="selectedSize" class="stock-info">Διαθέσιμα τεμάχια: {{ selectedSize.stockQuantity }}</p>
         </div>
