@@ -4,7 +4,7 @@
     <div class="logo">BRODIOS</div>
     <ul class="nav-links">
       <li (click)="changePage('home')" [class.active]="currentPage === 'home'">HOME</li>
-      <li (click)="changePage('store')" [class.active]="currentPage === 'store'">STORE</li>
+      <li (click)="changePage('store')" [class.active]="currentPage === 'store' || currentPage === 'details'">STORE</li>
       <li (click)="changePage('about')" [class.active]="currentPage === 'about'">ABOUT US</li>
     </ul>
   </nav>
@@ -18,7 +18,6 @@
   </div>
 
   <div class="page-section store-view" *ngIf="currentPage === 'store'">
-
     <div class="category-bar">
       <button (click)="filterCategory('all')" [class.selected]="selectedCategory === 'all'">ALL</button>
       <button (click)="filterCategory('Kits')" [class.selected]="selectedCategory === 'Kits'">KITS</button>
@@ -26,15 +25,48 @@
     </div>
 
     <div class="products-grid">
-      <div class="product-card" *ngFor="let product of filteredProducts">
+      <div class="product-card" *ngFor="let product of filteredProducts" (click)="openProduct(product)">
         <div class="image-container">
           <img [src]="product.imageUrl" [alt]="product.name">
         </div>
         <div class="info">
           <h3>{{ product.name }}</h3>
           <p class="price">{{ product.basePrice }} €</p>
-          <button class="buy-btn">Προσθήκη</button>
+          <button class="buy-btn">Προβολή</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-section details-view" *ngIf="currentPage === 'details' && selectedProduct">
+
+    <button class="back-btn" (click)="changePage('store')">← Πίσω στο Store</button>
+
+    <div class="details-container">
+      <div class="details-image">
+        <img [src]="selectedProduct.imageUrl" [alt]="selectedProduct.name">
+      </div>
+
+      <div class="details-info">
+        <h2>{{ selectedProduct.name }}</h2>
+        <p class="details-category">{{ selectedProduct.category?.name }}</p>
+        <p class="details-desc">{{ selectedProduct.description }}</p>
+        <p class="details-price">{{ selectedProduct.basePrice }} €</p>
+
+        <div class="size-selector">
+          <h3>Επιλέξτε Μέγεθος:</h3>
+          <div class="sizes">
+            <button *ngFor="let variant of selectedProduct.variants"
+                    (click)="selectSize(variant)"
+                    [class.active-size]="selectedSize === variant"
+                    [disabled]="variant.stockQuantity === 0">
+              {{ variant.sizeName }}
+            </button>
+          </div>
+          <p *ngIf="selectedSize" class="stock-info">Διαθέσιμα τεμάχια: {{ selectedSize.stockQuantity }}</p>
+        </div>
+
+        <button class="add-cart-btn" (click)="addToCart()">ΠΡΟΣΘΗΚΗ ΣΤΟ ΚΑΛΑΘΙ</button>
       </div>
     </div>
   </div>

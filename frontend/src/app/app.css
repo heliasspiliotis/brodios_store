@@ -175,3 +175,81 @@ body {
   width: 100%;
   cursor: pointer;
 }
+
+/* --- DETAILS PAGE STYLES --- */
+.details-view {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #d4af37;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.details-container {
+  display: flex;
+  gap: 50px;
+  background: rgba(255, 255, 255, 0.05); /* Ελαφρώς φωτεινό φόντο */
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.details-image img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+  background: white; /* Λευκό φόντο πίσω από το ρούχο */
+}
+
+.details-info {
+  flex: 1;
+  color: white;
+}
+
+.details-info h2 { font-size: 2.5rem; margin-bottom: 10px; color: #d4af37; }
+.details-desc { color: #ccc; line-height: 1.6; margin-bottom: 20px; }
+.details-price { font-size: 2rem; font-weight: bold; margin-bottom: 30px; }
+
+/* Κουμπιά Μεγεθών */
+.sizes { display: flex; gap: 10px; margin-bottom: 15px; }
+.sizes button {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #666;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sizes button:hover { border-color: #d4af37; color: #d4af37; }
+
+/* Όταν επιλεγεί ένα μέγεθος */
+.sizes button.active-size {
+  background: #d4af37;
+  color: black;
+  border: none;
+}
+
+/* Κουμπί Προσθήκης */
+.add-cart-btn {
+  width: 100%;
+  padding: 15px;
+  background: #d4af37;
+  color: black;
+  border: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+.add-cart-btn:hover { background: white; }
