@@ -6,6 +6,17 @@
       <li (click)="changePage('home')" [class.active]="currentPage === 'home'">HOME</li>
       <li (click)="changePage('store')" [class.active]="currentPage === 'store' || currentPage === 'details'">STORE</li>
       <li (click)="changePage('about')" [class.active]="currentPage === 'about'">ABOUT US</li>
+
+      <li (click)="changePage('cart')" [class.active]="currentPage === 'cart'" style="cursor: pointer; font-weight: bold; color: #d4af37;">
+        🛒 ΚΑΛΑΘΙ ({{ cart.length }})
+      </li>
+
+      <li *ngIf="!isLoggedIn" (click)="changePage('login')" [class.active]="currentPage === 'login'">
+        🔑 LOGIN
+      </li>
+      <li *ngIf="isLoggedIn" (click)="logout()" style="color: #ff4444; cursor: pointer;">
+        👤 {{ currentUserData.name }} (EXIT)
+      </li>
     </ul>
   </nav>
 
@@ -79,5 +90,91 @@
     <h1>About Us</h1>
     <p>We are Brodios FC. Excellence since 2022.</p>
   </div>
+  <div class="page-section cart-view" *ngIf="currentPage === 'cart'">
+    <h2>Το Καλάθι μου</h2>
 
+    <div *ngIf="cart.length === 0" class="empty-cart">
+      <p>Το καλάθι είναι άδειο...</p>
+      <button class="back-btn" (click)="changePage('store')">Πίσω στο Store</button>
+    </div>
+
+    <div *ngIf="cart.length > 0">
+      <div class="cart-item" *ngFor="let item of cart; let i = index">
+        <img [src]="item.product.imageUrl" class="cart-img">
+        <div class="cart-details">
+          <h3>{{ item.product.name }}</h3>
+          <p>Μέγεθος: <b>{{ item.size.size }}</b></p>
+          <p class="price">{{ item.product.basePrice }} €</p>
+        </div>
+        <button class="remove-btn" (click)="removeFromCart(i)">🗑️ Αφαίρεση</button>
+      </div>
+
+      <div class="cart-total">
+        <h3>Σύνολο: {{ getTotalPrice() }} €</h3>
+        <button class="checkout-btn" (click)="goToCheckout()">ΟΛΟΚΛΗΡΩΣΗ ΑΓΟΡΑΣ</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-section checkout-view" *ngIf="currentPage === 'checkout'">
+    <h2>Ολοκλήρωση Παραγγελίας</h2>
+    <div class="checkout-container">
+      <div class="checkout-form">
+        <div class="form-group">
+          <label>Ονοματεπώνυμο</label>
+          <input type="text" [(ngModel)]="customer.name" placeholder="Το όνομά σας">
+        </div>
+        <div class="form-group">
+          <label>Διεύθυνση</label>
+          <input type="text" [(ngModel)]="customer.address" placeholder="Οδός, Αριθμός">
+        </div>
+        <div class="form-group">
+          <label>Τηλέφωνο</label>
+          <input type="tel" [(ngModel)]="customer.phone" placeholder="Το κινητό σας">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="customer.email" placeholder="name@example.com">
+        </div>
+        <button class="confirm-btn" (click)="submitOrder()">ΕΠΙΒΕΒΑΙΩΣΗ ΑΓΟΡΑΣ</button>
+        <button class="back-btn" (click)="changePage('cart')" style="margin-top: 10px;">Πίσω</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-section login-view" *ngIf="currentPage === 'login'">
+    <div class="auth-box">
+      <h2>Σύνδεση</h2>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" [(ngModel)]="loginForm.username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="loginForm.password">
+      </div>
+      <button class="auth-btn" (click)="performLogin()">ΕΙΣΟΔΟΣ</button>
+      <p class="switch-auth">Δεν έχετε λογαριασμό; <span (click)="changePage('register')">Εγγραφή</span></p>
+    </div>
+  </div>
+
+  <div class="page-section register-view" *ngIf="currentPage === 'register'">
+    <div class="auth-box">
+      <h2>Εγγραφή</h2>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" [(ngModel)]="registerForm.username">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="registerForm.email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="registerForm.password">
+      </div>
+      <button class="auth-btn" (click)="performRegister()">ΕΓΓΡΑΦΗ</button>
+      <p class="switch-auth">Έχετε λογαριασμό; <span (click)="changePage('login')">Σύνδεση</span></p>
+    </div>
+  </div>
 </div>

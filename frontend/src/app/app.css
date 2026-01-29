@@ -253,3 +253,90 @@ body {
   border-radius: 5px;
 }
 .add-cart-btn:hover { background: white; }
+
+
+/* --- CART PAGE STYLES --- */
+.cart-view {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  color: white;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #333;
+}
+
+.cart-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  background: white;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
+.cart-details {
+  flex: 1;
+}
+
+.cart-details h3 { margin: 0 0 5px 0; color: #d4af37; }
+.cart-details p { margin: 0; color: #ccc; }
+
+.remove-btn {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.remove-btn:hover { background: #cc0000; }
+
+.cart-total {
+  margin-top: 30px;
+  text-align: right;
+  border-top: 2px solid #d4af37;
+  padding-top: 20px;
+}
+
+.cart-total h3 { font-size: 1.5rem; margin-bottom: 15px; }
+
+.checkout-btn {
+  background: #d4af37;
+  color: black;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.checkout-btn:hover { background: white; }
+
+/* --- FORM STYLES --- */
+.checkout-container { max-width: 600px; margin: 0 auto; }
+.checkout-form { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; }
+
+.form-group { margin-bottom: 15px; text-align: left; }
+.form-group label { display: block; color: #d4af37; margin-bottom: 5px; }
+.form-group input { width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
+
+.confirm-btn { width: 100%; padding: 15px; background: #28a745; color: white; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
+.confirm-btn:hover { background: #218838; }
+
+/* --- AUTH STYLES (LOGIN/REGISTER) --- */
+.auth-box { max-width: 400px; margin: 50px auto; padding: 30px; background: rgba(255,255,255,0.05); border: 1px solid #d4af37; border-radius: 10px; text-align: center; }
+.auth-box h2 { color: #d4af37; margin-bottom: 20px; }
+
+.auth-btn { width: 100%; padding: 12px; background: #d4af37; color: black; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+.auth-btn:hover { background: white; }
+
+.switch-auth { margin-top: 15px; font-size: 0.9rem; color: #ccc; }
+.switch-auth span { color: #d4af37; cursor: pointer; text-decoration: underline; }
