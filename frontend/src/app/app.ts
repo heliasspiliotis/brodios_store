@@ -11,65 +11,70 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./app.css']
 })
 export class AppComponent implements OnInit {
-  // Μεταβλητές Πλοήγησης
   currentPage: string = 'home';
   selectedCategory: string = 'all';
 
-  // Δεδομένα
   products: any[] = [];
 
-  selectedProduct: any = null; // Το προϊόν που βλέπουμε
-  selectedSize: any = null;    // Το μέγεθος που διάλεξε ο πελάτης
+  // --- ΝΕΟ: Η λίστα που κρατάει τα ψώνια ---
+  cart: any[] = [];
+
+  selectedProduct: any = null;
+  selectedSize: any = null;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // Φόρτωση προϊόντων από τη Java
     this.http.get<any[]>('http://localhost:8080/api/products').subscribe({
       next: (data) => this.products = data,
       error: (err) => console.error('Error fetching products:', err)
     });
   }
 
-  // Αλλαγή Σελίδας
   changePage(page: string) {
     this.currentPage = page;
-    // Αν φύγουμε από τα details, καθαρίζουμε την επιλογή
     if (page === 'store') {
       this.selectedCategory = 'all';
       this.selectedProduct = null;
     }
   }
 
-  // Φίλτρο Κατηγορίας
   filterCategory(category: string) {
     this.selectedCategory = category;
   }
 
-
-  // 1. Άνοιγμα προϊόντος
   openProduct(product: any) {
     console.log('Product data:', product);
     this.selectedProduct = product;
-    this.selectedSize = null; // Reset το μέγεθος
+    this.selectedSize = null;
     this.currentPage = 'details';
   }
 
-  // 2. Επιλογή Μεγέθους
   selectSize(variant: any) {
     this.selectedSize = variant;
   }
 
-  // 3. Προσθήκη στο καλάθι
+  // Η συνάρτηση που βάζει το προϊόν στο καλάθι
   addToCart() {
     if (!this.selectedSize) {
       alert('Παρακαλώ επιλέξτε μέγεθος!');
       return;
     }
-    alert(`Προστέθηκε στο καλάθι: ${this.selectedProduct.name} (Μέγεθος: ${this.selectedSize.size})`);
+
+    // 1. Δημιουργούμε το αντικείμενο για το καλάθι
+    const item = {
+      product: this.selectedProduct,
+      size: this.selectedSize
+    };
+
+    // 2. Το βάζουμε στη λίστα
+    this.cart.push(item);
+
+    // 3.  Εμφανίζουμε μήνυμα  επιστρέφουμε στο κατάστημα
+    alert(`Προστέθηκε: ${this.selectedProduct.name} (${this.selectedSize.size})`);
+
   }
 
-  // Φιλτράρισμα λίστας
   get filteredProducts() {
     if (this.selectedCategory === 'all') {
       return this.products;
