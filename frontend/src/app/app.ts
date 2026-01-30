@@ -102,36 +102,62 @@ export class AppComponent implements OnInit {
 
   // --- LOGIC LOGIN / REGISTER ---
 
-  // 1. Σύνδεση (Mock)
-  performLogin() {
-    if (this.loginForm.username && this.loginForm.password) {
-      this.isLoggedIn = true;
-      this.currentUserData = { name: this.loginForm.username };
-      alert('Καλώς ήρθατε ' + this.loginForm.username + '!');
-      this.changePage('home'); // Πάμε αρχική
-    } else {
-      alert('Συμπληρώστε όνομα και κωδικό!');
-    }
-  }
+  // 1. ΠΡΑΓΜΑΤΙΚΗ ΣΥΝΔΕΣΗ (Μιλάει με τη Java)
+    performLogin() {
+      const url = 'http://localhost:8080/api/auth/login';
 
-  // 2. Εγγραφή (Mock)
-  performRegister() {
-    if (this.registerForm.username && this.registerForm.password) {
-      alert('Η εγγραφή πέτυχε! Τώρα μπορείτε να συνδεθείτε.');
-      this.changePage('login'); // Πάμε στο login
-    } else {
-      alert('Συμπληρώστε τα στοιχεία!');
-    }
-  }
+      this.http.post(url, this.loginForm).subscribe({
+        next: (response: any) => {
+          // ΕΠΙΤΥΧΙΑ: Η Java απάντησε σωστά
+          this.isLoggedIn = true;
 
-  // 3. Αποσύνδεση
-  logout() {
-    this.isLoggedIn = false;
-    this.currentUserData = null;
-    this.cart = []; // Καθαρίζουμε το καλάθι κατά την έξοδο (προαιρετικό)
-    alert('Αποσυνδεθήκατε επιτυχώς.');
-    this.changePage('home');
-  }
+          // Αποθηκεύουμε τα στοιχεία που ήρθαν από τη βάση
+          this.currentUserData = response;
+
+          // Γεμίζουμε αυτόματα τη φόρμα παραγγελίας με τα στοιχεία του χρήστη!
+          this.customer.name = response.username;
+          this.customer.address = response.address;
+          this.customer.phone = response.phone;
+          this.customer.email = response.email;
+
+          alert('Καλώς ήρθατε ' + response.username + '!');
+          this.changePage('home');
+        },
+        error: (err) => {
+          // ΑΠΟΤΥΧΙΑ: Λάθος κωδικός
+          console.error(err);
+          alert('Λάθος όνομα χρήστη ή κωδικός!');
+        }
+      });
+    }
+
+    // 2. ΠΡΑΓΜΑΤΙΚΗ ΕΓΓΡΑΦΗ
+    performRegister() {
+      const url = 'http://localhost:8080/api/auth/register';
+
+      // Στέλνουμε όλο το αντικείμενο (με διεύθυνση και τηλέφωνο)
+      this.http.post(url, this.registerForm, { responseType: 'text' }).subscribe({
+        next: (response) => {
+          alert('Η εγγραφή πέτυχε! Τώρα κάντε είσοδο.');
+          this.changePage('login');
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Η εγγραφή απέτυχε. Δοκιμάστε άλλο username/email.');
+        }
+      });
+    }
+
+    // 3. ΑΠΟΣΥΝΔΕΣΗ
+    logout() {
+      this.isLoggedIn = false;
+      this.currentUserData = null;
+      // Καθαρίζουμε τη φόρμα παραγγελίας
+      this.customer = { name: '', address: '', phone: '', email: '' };
+
+      alert('Αποσυνδεθήκατε.');
+      this.changePage('home');
+    }
 
   // --- LOGIC CHECKOUT (ΤΑΜΕΙΟ) ---
 

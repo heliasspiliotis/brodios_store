@@ -3,6 +3,8 @@ package com.brodios.store.service;
 import com.brodios.store.domain.User;
 import com.brodios.store.domain.Role;
 import com.brodios.store.domain.enums.RoleName;
+import com.brodios.store.dto.LoginRequest;
+import com.brodios.store.dto.RegisterRequest;
 import com.brodios.store.repository.RoleRepository;
 import com.brodios.store.repository.UserRepository;
 import com.brodios.store.security.JwtTokenProvider;
@@ -24,7 +26,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // Constructor Injection για όλες τις εξαρτήσεις
     public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository,
                        RoleRepository roleRepository, PasswordEncoder passwordEncoder,
                        JwtTokenProvider jwtTokenProvider) {
@@ -35,45 +36,45 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // Λειτουργία 1: Εγγραφή νέου χρήστη
-    public String register(String username, String email, String password) {
-        // Business Logic: Έλεγχος μοναδικότητας
-        if (userRepository.existsByUsername(username)) {
+    // ΑΛΛΑΓΗ 1: Δέχεσαι RegisterRequest (DTO) αντί για σκέτα Strings
+    // για να πάρεις και τη διεύθυνση/τηλέφωνο.
+    public String register(RegisterRequest request) {
+
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username is already taken!");
         }
-        if (userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email is already registered!");
         }
 
-        // 1. Δημιουργία νέου User
         User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password)); // Κωδικοποίηση password (BCrypt)
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // 2. Ορισμός default ρόλου: CUSTOMER
+        // ---  Αποθήκευση Διεύθυνσης & Τηλεφώνου ---
+        user.setAddress(request.getAddress());
+        user.setPhone(request.getPhone());
+
+
         Role customerRole = roleRepository.findByName(RoleName.ROLE_CUSTOMER)
                 .orElseThrow(() -> new RuntimeException("Error: Customer Role is not defined."));
         user.setRoles(Set.of(customerRole));
 
-        // 3. Αποθήκευση (Persistence Layer)
         userRepository.save(user);
 
         return "User registered successfully!";
     }
 
-    // Λειτουργία 2: Login χρήστη
-    public String login(String username, String password) {
+    // ΑΛΛΑΓΗ 2: Δέχεσαι LoginRequest
+    public String login(LoginRequest request) {
 
-        // 1. Πιστοποίηση: Ελέγχει τα credentials με βάση το CustomUserDetailsService
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // 2. Ορισμός της Authentication στο Security Context
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 3. Δημιουργία και επιστροφή JWT
         return jwtTokenProvider.generateToken(authentication);
     }
 }

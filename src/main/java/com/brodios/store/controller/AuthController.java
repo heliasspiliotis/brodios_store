@@ -1,33 +1,59 @@
 package com.brodios.store.controller;
 
+import com.brodios.store.domain.User;
+import com.brodios.store.dto.LoginRequest;
+import com.brodios.store.dto.RegisterRequest;
+import com.brodios.store.repository.UserRepository;
 import com.brodios.store.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/auth") // Base path for Authentication Endpoints
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
 
-    // Constructor Injection
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserRepository userRepository) {
         this.authService = authService;
+        this.userRepository = userRepository;
     }
 
-    // Endpoint για Login (Επιστρέφει JWT)
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password){
-        String token = authService.login(username, password);
-        return ResponseEntity.ok(token); // Επιστρέφει το JWT Token στο Front-end
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        // 1. Παίρνουμε το Token από το Service
+        String token = authService.login(loginRequest);
+
+        // 2. Βρίσκουμε τον χρήστη για να στείλουμε τα στοιχεία του στο Frontend
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 3. Φτιάχνουμε την απάντηση (JSON)
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("username", user.getUsername());
+        response.put("email", user.getEmail());
+        response.put("address", user.getAddress());
+        response.put("phone", user.getPhone());
+        response.put("id", user.getId());
+
+        return ResponseEntity.ok(response);
     }
 
-    // Endpoint για Registration (Εγγραφή)
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestParam String username, @RequestParam String email, @RequestParam String password){
-        // Σημείωση: Στην πραγματικότητα, θα χρησιμοποιούσαμε DTO (Data Transfer Object) εδώ.
-        String response = authService.register(username, email, password);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            // Προσπαθούμε να κάνουμε εγγραφή
+            String response = authService.register(registerRequest);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

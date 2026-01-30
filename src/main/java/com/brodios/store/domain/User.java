@@ -24,6 +24,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String address;
+    private String phone;
+
     // Σύνδεση με Ρόλους
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -33,5 +36,5 @@ public class User {
     )
     private Set<Role> roles;
 
-    // ... Μπορείτε να προσθέσετε πεδία όπως: firstName, lastName, registrationDate
+
 }
