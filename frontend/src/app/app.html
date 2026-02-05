@@ -30,15 +30,17 @@
 
   <div class="page-section store-view" *ngIf="currentPage === 'store'">
     <div class="category-bar">
-      <button (click)="filterCategory('all')" [class.selected]="selectedCategory === 'all'">ALL</button>
-      <button (click)="filterCategory('Kits')" [class.selected]="selectedCategory === 'Kits'">KITS</button>
-      <button (click)="filterCategory('Jackets')" [class.selected]="selectedCategory === 'Jackets'">JACKETS</button>
+      <button (click)="filterCategory('all')" [class.selected]="selectedCategory === 'all'">ΟΛΑ</button>
+      <button (click)="filterCategory('Φανέλες')" [class.selected]="selectedCategory === 'Φανέλες'">ΦΑΝΕΛΕΣ</button>
+      <button (click)="filterCategory('Ζακέτες')" [class.selected]="selectedCategory === 'Ζακέτες'">ΖΑΚΕΤΕΣ</button>
+      <button (click)="filterCategory('Μπουφάν')" [class.selected]="selectedCategory === 'Μπουφάν'">ΜΠΟΥΦΑΝ</button>
+      <button (click)="filterCategory('Προπόνηση')" [class.selected]="selectedCategory === 'Προπόνηση'">ΠΡΟΠΟΝΗΣΗ</button>
     </div>
 
     <div class="products-grid">
       <div class="product-card" *ngFor="let product of filteredProducts" (click)="openProduct(product)">
         <div class="image-container">
-          <img [src]="product.imageUrl" [alt]="product.name">
+          <img [src]="product.imageUrl" [alt]="product.name" onerror="this.src='https://via.placeholder.com/150'">
         </div>
         <div class="info">
           <h3>{{ product.name }}</h3>
@@ -55,7 +57,7 @@
 
     <div class="details-container">
       <div class="details-image">
-        <img [src]="selectedProduct.imageUrl" [alt]="selectedProduct.name">
+        <img [src]="selectedProduct.imageUrl" [alt]="selectedProduct.name" onerror="this.src='https://via.placeholder.com/300'">
       </div>
 
       <div class="details-info">
@@ -66,17 +68,13 @@
 
         <div class="size-selector">
           <h3>Επιλέξτε Μέγεθος:</h3>
-          <div class="size-selector">
-            <h3>Επιλέξτε Μέγεθος:</h3>
-            <div class="sizes">
-              <button *ngFor="let variant of selectedProduct.variants"
-                      (click)="selectSize(variant)"
-                      [class.active-size]="selectedSize === variant"
-                      [disabled]="variant.stockQuantity === 0">
-                {{ variant.size }}
-              </button>
-            </div>
-            <p *ngIf="selectedSize" class="stock-info">Διαθέσιμα τεμάχια: {{ selectedSize.stockQuantity }}</p>
+          <div class="sizes">
+            <button *ngFor="let variant of selectedProduct.variants"
+                    (click)="selectSize(variant)"
+                    [class.active-size]="selectedSize === variant"
+                    [disabled]="variant.stockQuantity === 0">
+              {{ variant.size }}
+            </button>
           </div>
           <p *ngIf="selectedSize" class="stock-info">Διαθέσιμα τεμάχια: {{ selectedSize.stockQuantity }}</p>
         </div>
@@ -90,6 +88,7 @@
     <h1>About Us</h1>
     <p>We are Brodios FC. Excellence since 2022.</p>
   </div>
+
   <div class="page-section cart-view" *ngIf="currentPage === 'cart'">
     <h2>Το Καλάθι μου</h2>
 
@@ -100,10 +99,12 @@
 
     <div *ngIf="cart.length > 0">
       <div class="cart-item" *ngFor="let item of cart; let i = index">
-        <img [src]="item.product.imageUrl" class="cart-img">
+        <img [src]="item.product.imageUrl" class="cart-img" onerror="this.src='https://via.placeholder.com/50'">
         <div class="cart-details">
           <h3>{{ item.product.name }}</h3>
-          <p>Μέγεθος: <b>{{ item.size.size }}</b></p>
+
+          <p>Μέγεθος: <b>{{ item.variant?.size }}</b></p>
+
           <p class="price">{{ item.product.basePrice }} €</p>
         </div>
         <button class="remove-btn" (click)="removeFromCart(i)">🗑️ Αφαίρεση</button>
@@ -173,8 +174,18 @@
         <label>Password</label>
         <input type="password" [(ngModel)]="registerForm.password">
       </div>
+      <div class="form-group">
+        <label>Address (Προαιρετικό)</label>
+        <input type="text" [(ngModel)]="registerForm.address">
+      </div>
+      <div class="form-group">
+        <label>Phone (Προαιρετικό)</label>
+        <input type="text" [(ngModel)]="registerForm.phone">
+      </div>
+
       <button class="auth-btn" (click)="performRegister()">ΕΓΓΡΑΦΗ</button>
       <p class="switch-auth">Έχετε λογαριασμό; <span (click)="changePage('login')">Σύνδεση</span></p>
     </div>
   </div>
+
 </div>

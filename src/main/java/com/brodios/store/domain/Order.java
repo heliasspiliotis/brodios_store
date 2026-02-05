@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "customer_orders")
 public class Order {
 
     @Id
@@ -19,13 +19,15 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private LocalDateTime orderDate = LocalDateTime.now(); // Η ώρα τώρα
+    private LocalDateTime createdAt = LocalDateTime.now(); // Η ώρα τώρα
 
     private BigDecimal totalPrice;
 
     // Κατάσταση: PENDING, COMPLETED, CANCELLED
     private String status = "COMPLETED";
 
+    private String shippingAddress;
+    private String shippingPhone;
     // Τα προϊόντα της παραγγελίας
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> items = new ArrayList<>();
@@ -37,8 +39,14 @@ public class Order {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public LocalDateTime getOrderDate() { return orderDate; }
-    public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime orderDate) { this.createdAt = orderDate; }
+
+    public String getShippingAddress() { return shippingAddress; }
+    public void setShippingAddress(String shippingAddress) { this.shippingAddress = shippingAddress; }
+
+    public String getShippingPhone() { return shippingPhone; }
+    public void setShippingPhone(String shippingPhone) { this.shippingPhone = shippingPhone; }
 
     public BigDecimal getTotalPrice() { return totalPrice; }
     public void setTotalPrice(BigDecimal totalPrice) { this.totalPrice = totalPrice; }

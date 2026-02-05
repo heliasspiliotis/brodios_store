@@ -14,7 +14,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    @JsonIgnore // Για να μην έχουμε λούπες στο JSON
+    @JsonIgnore
     private Order order;
 
     @ManyToOne
@@ -23,7 +23,7 @@ public class OrderItem {
 
     private Integer quantity;
 
-    private BigDecimal priceAtPurchase; // Η τιμή που είχε όταν αγοράστηκε
+    private BigDecimal price;
 
     // --- Getters & Setters ---
     public Long getId() { return id; }
@@ -38,6 +38,6 @@ public class OrderItem {
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-    public BigDecimal getPriceAtPurchase() { return priceAtPurchase; }
-    public void setPriceAtPurchase(BigDecimal priceAtPurchase) { this.priceAtPurchase = priceAtPurchase; }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal priceAtPurchase) { this.price = priceAtPurchase; }
 }

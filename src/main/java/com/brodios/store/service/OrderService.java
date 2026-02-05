@@ -1,75 +1,77 @@
 package com.brodios.store.service;
 
 import com.brodios.store.domain.*;
+import com.brodios.store.dto.*; // Παίρνει όλα τα DTOs
 import com.brodios.store.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private CartService cartService; // Χρησιμοποιούμε το CartService για να βρούμε το καλάθι
-    @Autowired
-    private ProductVariantRepository variantRepository;
+    private final OrderRepository orderRepository;
+    private final ProductVariantRepository variantRepository;
+    private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
 
-    @Transactional // Σημαντικό: Ή γίνονται όλα ή τίποτα!
-    public Order checkout(String username) {
-        // 1. Βρες το καλάθι του χρήστη
-        Cart cart = cartService.getCart(username);
+    public OrderService(OrderRepository orderRepository,
+                        ProductVariantRepository variantRepository,
+                        UserRepository userRepository,
+                        OrderItemRepository orderItemRepository) {
+        this.orderRepository = orderRepository;
+        this.variantRepository = variantRepository;
+        this.userRepository = userRepository;
+        this.orderItemRepository = orderItemRepository;
+    }
 
-        // 2. Έλεγχος αν είναι άδειο
-        if (cart.getItems().isEmpty()) {
-            throw new RuntimeException("Το καλάθι είναι άδειο!");
+    @Transactional
+    public void createOrder(OrderRequest request) {
+        // Log για να δούμε τι φτάνει
+        System.out.println("Service: Ξεκινάει η παραγγελία για " + request.getUsername());
+
+        if (request.getItems() == null || request.getItems().isEmpty()) {
+            System.err.println("ΣΦΑΛΜΑ: Η λίστα items είναι NULL!");
+            throw new RuntimeException("Το καλάθι είναι άδειο (System Error: items is null)");
         }
+        System.out.println("Service: Βρέθηκαν " + request.getItems().size() + " προϊόντα.");
 
-        // 3. Δημιούργησε την Παραγγελία
+        // 1. Βρίσκουμε τον χρήστη
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found: " + request.getUsername()));
+
+        // 2. Δημιουργούμε την Παραγγελία
         Order order = new Order();
-        order.setUser(cart.getUser());
-        order.setTotalPrice(cart.getTotalPrice());
-        order.setStatus("COMPLETED");
+        order.setUser(user);
+        order.setShippingAddress(request.getShippingAddress());
+        order.setShippingPhone(request.getShippingPhone());
+        order.setTotalPrice(request.getTotalPrice());
+        order.setStatus("PENDING");
+        order.setCreatedAt(LocalDateTime.now());
 
-        // 4. Μετέτρεψε τα CartItems σε OrderItems & Μείωσε το Stock
-        for (CartItem cartItem : cart.getItems()) {
-            ProductVariant variant = cartItem.getVariant();
-            int quantity = cartItem.getQuantity();
-
-            // Έλεγχος Stock
-            if (variant.getStockQuantity() < quantity)
-            {
-                throw new RuntimeException("Δεν υπάρχει επαρκές απόθεμα για το προϊόν: " + variant.getProduct().getName());
-            }
-
-            // Μείωση Stock
-            variant.setStockQuantity(variant.getStockQuantity() - quantity);
-            variantRepository.save(variant);
-
-            // Δημιουργία OrderItem
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setVariant(variant);
-            orderItem.setQuantity(quantity);
-            orderItem.setPriceAtPurchase(variant.getProduct().getBasePrice()); // Κρατάμε την τιμή που είχε τώρα
-
-            order.getItems().add(orderItem);
-        }
-
-        // 5. Αποθήκευσε την Παραγγελία
         Order savedOrder = orderRepository.save(order);
 
-        // 6. Άδειασε το Καλάθι
-        cart.getItems().clear();
-        cart.setTotalPrice(BigDecimal.ZERO);
-        cartRepository.save(cart);
+        // 3. Περνάμε τα προϊόντα
+        for (OrderItemRequest itemRequest : request.getItems()) {
+            ProductVariant variant = variantRepository.findById(itemRequest.getVariantId())
+                    .orElseThrow(() -> new RuntimeException("Variant not found ID: " + itemRequest.getVariantId()));
 
-        return savedOrder;
+            if (variant.getStockQuantity() < itemRequest.getQuantity()) {
+                throw new RuntimeException("Δεν υπάρχει επαρκές απόθεμα: " + variant.getProduct().getName());
+            }
+
+            variant.setStockQuantity(variant.getStockQuantity() - itemRequest.getQuantity());
+            variantRepository.save(variant);
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(savedOrder);
+            orderItem.setVariant(variant);
+            orderItem.setQuantity(itemRequest.getQuantity());
+            orderItem.setPrice(variant.getProduct().getBasePrice());
+
+            orderItemRepository.save(orderItem);
+        }
+        System.out.println("Service: Η παραγγελία ολοκληρώθηκε!");
     }
 }

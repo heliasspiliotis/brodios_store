@@ -1,24 +1,38 @@
 package com.brodios.store.controller;
 
-import com.brodios.store.domain.Order;
+import com.brodios.store.dto.OrderRequest;
 import com.brodios.store.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.security.Principal; // Χρειαζόμαστε αυτό το import
 
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
-    // POST http://localhost:8080/api/orders/checkout
-    @PostMapping("/checkout")
-    public Order checkout(Principal principal) {
-        return orderService.checkout(principal.getName());
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    // Προσθέσαμε το "Principal principal" στα ορίσματα
+    @PostMapping("/create")
+    public ResponseEntity<String> createOrder(@RequestBody OrderRequest request, Principal principal) {
+        try {
+            String realUsername = principal.getName();
+            request.setUsername(realUsername);
+
+            System.out.println("Δημιουργία παραγγελίας για τον χρήστη: " + realUsername);
+
+            orderService.createOrder(request);
+
+            return ResponseEntity.ok("Η παραγγελία καταχωρήθηκε επιτυχώς!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("ΣΦΑΛΜΑ Server: " + e.getMessage());
+        }
     }
 }
