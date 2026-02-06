@@ -9,8 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Επιτρέπουμε τα πάντα
-                .allowedOrigins("http://localhost:4200") // Μόνο από το Angular μας
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:4200")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Επιτρεπόμενες ενέργειες
                 .allowedHeaders("*")
                 .allowCredentials(true);

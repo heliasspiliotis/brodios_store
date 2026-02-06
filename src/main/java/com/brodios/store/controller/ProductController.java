@@ -33,14 +33,14 @@ public class ProductController {
 
     // ADMIN ONLY: Μόνο διαχειριστές μπορούν να προσθέσουν κατηγορίες
     @PostMapping("/categories")
-    @PreAuthorize("hasRole('ADMIN')") // <--- Authorization Check
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
         return ResponseEntity.ok(productService.createCategory(category));
     }
 
     // ADMIN ONLY: Μόνο διαχειριστές μπορούν να προσθέσουν προϊόντα σε μια κατηγορία
     @PostMapping("/category/{categoryId}")
-    @PreAuthorize("hasRole('ADMIN')") // <--- Authorization Check
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> createProduct(@PathVariable Long categoryId, @RequestBody Product product) {
         return ResponseEntity.ok(productService.createProduct(categoryId, product));
     }

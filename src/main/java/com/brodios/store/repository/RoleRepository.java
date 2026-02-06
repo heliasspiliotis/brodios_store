@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-
-    // Εύρεση ρόλου με το όνομα
     Optional<Role> findByName(RoleName name);
 }

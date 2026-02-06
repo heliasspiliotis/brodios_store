@@ -23,7 +23,7 @@ public class JwtTokenProvider {
     @Value("${app.jwt-expiration-milliseconds}")
     private long jwtExpirationDate;
 
-    // Μέθοδος 1: Δημιουργία Token
+    // Δημιουργία Token
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
         Date currentDate = new Date();
@@ -42,7 +42,7 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    // Μέθοδος 2: Εξαγωγή username από το Token (ΕΝΗΜΕΡΩΜΕΝΗ ΓΙΑ 0.12.5)
+    // Εξαγωγή username από το Token
     public String getUsername(String token) {
         return Jwts.parser()
                 .verifyWith(key())
@@ -52,7 +52,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    // Μέθοδος 3: Επικύρωση Token (ΕΝΗΜΕΡΩΜΕΝΗ ΓΙΑ 0.12.5)
+    // Επικύρωση Token
     public boolean validateToken(String token) {
         try {
             Jwts.parser()

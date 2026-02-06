@@ -14,7 +14,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Ποιος έκανε την παραγγελία;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -65,13 +65,12 @@ public class CartService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (CartItem item : cart.getItems()) {
-            // Παίρνουμε την τιμή (είναι ήδη BigDecimal)
+            // Παίρνουμε την τιμή
             BigDecimal price = item.getVariant().getProduct().getBasePrice();
 
             // Μετατρέπουμε την ποσότητα σε BigDecimal για να κάνουμε πολλαπλασιασμό
             BigDecimal quantity = BigDecimal.valueOf(item.getQuantity());
 
-            // total = total + (price * quantity)
             total = total.add(price.multiply(quantity));
         }
 

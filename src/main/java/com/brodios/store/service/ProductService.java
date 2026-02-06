@@ -19,7 +19,7 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    // 1. Δημιουργία Προϊόντος (Σύνδεση με Category ΚΑΙ Variants)
+    // 1. Δημιουργία Προϊόντος
     public Product createProduct(Long categoryId, Product product) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -28,7 +28,7 @@ public class ProductService {
 
         if (product.getVariants() != null) {
             for (com.brodios.store.domain.ProductVariant variant : product.getVariants()) {
-                variant.setProduct(product); // Συνδέουμε το παιδί με τον γονέα
+                variant.setProduct(product);
             }
         }
 

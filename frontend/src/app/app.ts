@@ -168,7 +168,7 @@ export class AppComponent implements OnInit {
     this.changePage('home');
   }
 
-  // --- ΑΛΛΑΓΗ 2: ΟΛΟΚΛΗΡΩΣΗ ΑΓΟΡΑΣ ΜΕ TOKEN ---
+  // --- ΟΛΟΚΛΗΡΩΣΗ ΑΓΟΡΑΣ ΜΕ TOKEN ---
   submitOrder() {
       // 1. Έλεγχοι
       if (!this.isLoggedIn || !this.currentUserData) {

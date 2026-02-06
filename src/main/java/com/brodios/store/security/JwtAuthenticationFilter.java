@@ -19,7 +19,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
-    // Θα χρησιμοποιήσει την CustomUserDetailsService
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, UserDetailsService userDetailsService) {

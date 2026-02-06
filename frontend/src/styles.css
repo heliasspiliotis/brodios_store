@@ -6,9 +6,9 @@ body {
   /* Φόντο με το σήμα, ξεθωριασμένο με σκούρο φίλτρο */
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
               url('/assets/images/brodios-logo.jpeg');
-  background-size: cover; /* Καλύπτει όλη την οθόνη */
-  background-position: center; /* Κεντράρισμα */
-  background-attachment: fixed; /* Το φόντο μένει σταθερό όταν κάνεις scroll */
-  color: white; /* Λευκά γράμματα για να φαίνονται στο σκούρο φόντο */
-  min-height: 100vh; /* Ελάχιστο ύψος όσο η οθόνη */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
 }

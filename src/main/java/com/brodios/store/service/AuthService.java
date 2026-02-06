@@ -36,8 +36,6 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // ΑΛΛΑΓΗ 1: Δέχεσαι RegisterRequest (DTO) αντί για σκέτα Strings
-    // για να πάρεις και τη διεύθυνση/τηλέφωνο.
     public String register(RegisterRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -66,7 +64,6 @@ public class AuthService {
         return "User registered successfully!";
     }
 
-    // ΑΛΛΑΓΗ 2: Δέχεσαι LoginRequest
     public String login(LoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(

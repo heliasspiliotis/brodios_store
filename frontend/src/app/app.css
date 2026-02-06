@@ -38,7 +38,7 @@ body {
   color: #fff;
 }
 
-/* ΤΟ ΕΦΕ ΠΟΥ ΖΗΤΗΣΕΣ: Bold + Μεγέθυνση στο ποντίκι */
+/* Bold + Μεγέθυνση στο ποντίκι */
 .nav-links li:hover {
   font-weight: bold;
   transform: scale(1.2); /* Μεγαλώνει κατά 20% */
@@ -47,14 +47,14 @@ body {
 
 /* --- HOME PAGE --- */
 .home-view {
-  /* Υπολογίζουμε το ύψος ώστε να πιάνει όλη την οθόνη μείον την μπάρα από πάνω */
+
   height: calc(100vh - 70px);
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 
-  /* Η εικόνα μπαίνει φόντο με σκούρο φίλτρο από πάνω για να φαίνονται τα γράμματα */
+
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
                     url('/assets/images/brodios-logo.jpeg');
   background-size: cover; /* Η εικόνα καλύπτει όλο το πλαίσιο */
@@ -66,9 +66,8 @@ body {
 .welcome-box {
   padding: 40px;
   border-radius: 15px;
-  /* Ένα ελαφρύ ημιδιαφανές πλαίσιο για να τονιστεί το κείμενο */
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px); /* Εφέ θολώματος πίσω από τα γράμματα */
+  backdrop-filter: blur(5px);
 }
 
 .welcome-box h1 {
@@ -76,8 +75,8 @@ body {
   margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #d4af37; /* Χρυσό χρώμα στον τίτλο */
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Σκιά για να ξεχωρίζει από το φόντο */
+  color: #d4af37;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
 .welcome-box p {
@@ -94,13 +93,13 @@ body {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 30px; /* Στρογγυλεμένο κουμπί */
+  border-radius: 30px;
   transition: transform 0.2s, background 0.2s;
 }
 
 .cta-btn:hover {
   transform: scale(1.05);
-  background: #fff; /* Στο hover γίνεται λευκό */
+  background: #fff;
 }
 
 .cta-btn {
@@ -195,7 +194,7 @@ body {
 .details-container {
   display: flex;
   gap: 50px;
-  background: rgba(255, 255, 255, 0.05); /* Ελαφρώς φωτεινό φόντο */
+  background: rgba(255, 255, 255, 0.05);
   padding: 30px;
   border-radius: 15px;
 }
@@ -205,7 +204,7 @@ body {
   height: auto;
   border-radius: 10px;
   object-fit: contain;
-  background: white; /* Λευκό φόντο πίσω από το ρούχο */
+  background: white;
 }
 
 .details-info {
@@ -232,7 +231,7 @@ body {
 
 .sizes button:hover { border-color: #d4af37; color: #d4af37; }
 
-/* Όταν επιλεγεί ένα μέγεθος */
+/* Επιλογή μεγέθους */
 .sizes button.active-size {
   background: #d4af37;
   color: black;

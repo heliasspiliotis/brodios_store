@@ -15,7 +15,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Ορίζουμε τον ρόλο ως ENUM string για σαφήνεια: ROLE_ADMIN, ROLE_CUSTOMER
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private RoleName name;

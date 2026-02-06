@@ -12,7 +12,6 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    // ... υλοποίηση (όπως φαίνεται στην προηγούμενη απάντηση)
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,

@@ -24,12 +24,10 @@ public class Product {
 
     private String imageUrl;
 
-    // Σχέση Πολλά:1 (Many-to-One): Πολλά προϊόντα ανήκουν σε μία κατηγορία
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    // Σχέση 1:Πολλά (One-to-Many): Ένα προϊόν έχει πολλές παραλλαγές (Variants)
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ProductVariant> variants;
 

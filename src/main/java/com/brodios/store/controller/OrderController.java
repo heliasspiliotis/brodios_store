@@ -17,7 +17,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // Προσθέσαμε το "Principal principal" στα ορίσματα
+
     @PostMapping("/create")
     public ResponseEntity<String> createOrder(@RequestBody OrderRequest request, Principal principal) {
         try {

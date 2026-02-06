@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    // Custom query για εύρεση προϊόντων βάσει ID κατηγορίας
     List<Product> findByCategoryId(Long categoryId);
 }

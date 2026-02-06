@@ -19,7 +19,6 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String name;
 
-    // Σχέση 1:Πολλά (One-to-Many): Μία Κατηγορία έχει πολλά Προϊόντα
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Product> products;
