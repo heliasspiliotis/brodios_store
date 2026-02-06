@@ -5,7 +5,7 @@ import com.brodios.store.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal; // Χρειαζόμαστε αυτό το import
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/orders")
